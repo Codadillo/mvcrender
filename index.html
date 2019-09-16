@@ -126,7 +126,7 @@
             });
             const canvas = document.querySelector("canvas");
             let view = canvas.getBoundingClientRect();
-            let mpos = { x: 0.5, y: 0.5 };
+            let mpos = { x: 1/6, y: 1/6 };
             canvas.width = view.width * SAMPLE_RATIO;
             canvas.height = view.height * SAMPLE_RATIO;
             const gl = canvas.getContext("webgl");
@@ -179,9 +179,25 @@
                     gl.vertexAttribPointer(loc, 3, gl.FLOAT, false, 0, 0);
                     gl.enableVertexAttribArray(loc);
 
+                    let mouseStart = { x: 0, y: 0 };
+                    let mouseDown = false;
+                    window.addEventListener('mousedown', (e) => {
+                        mouseDown = true;
+                        mouseStart.x = e.x;
+                        mouseStart.y = e.y;
+                    });
+
+                    window.addEventListener('mouseup', (e) => {
+                        mouseDown = false;
+                    })
+
                     window.addEventListener('mousemove', (e) => {
-                        mpos.x = e.x / view.width;
-                        mpos.y = e.y / view.height;
+                        if (mouseDown) {
+                            mpos.x += (mouseStart.x - e.x) / view.width;
+                            mpos.y += (mouseStart.y - e.y) / view.height;
+                            mouseStart.x = e.x;
+                            mouseStart.y = e.y;
+                        }
                     });
 
                     window.addEventListener('resize', () => {

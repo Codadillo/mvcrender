@@ -10,6 +10,11 @@ const float MIN_DIST = 0.0;
 const float MAX_DIST = 100.0;
 const float EPSILON = 0.0001;
 
+const vec3 A_COLOR = vec3(0.8, 0.2, 0.17);
+const vec3 T_COLOR = vec3(0.1, 0.53, 0.26);
+const vec3 G_COLOR = vec3(0.98, 0.66, 0.13);
+const vec3 C_COLOR = vec3(0.22, 0.44, 0.92);
+
 const float UNIT_RATIO = 0.2;
 const float NUC_SEP = 0.332 * UNIT_RATIO;
 const float PHOS_SEP = 2.37 * UNIT_RATIO;
@@ -135,35 +140,36 @@ vec3 rayDirection(float fieldOfView, vec2 size, vec2 fragCoord) {
 
 vec3 nucleotideColor(float nucleotideID) {
     if (nucleotideID == 0.0) { // 0
-        return vec3(0.8, 0.2, 0.17);
+        return A_COLOR;
     } else if (nucleotideID == 1.0) { // 255
-        return vec3(0.1, 0.53, 0.26);
+        return T_COLOR;
     } else if (nucleotideID >= 0.5) { // 200
-        return vec3(0.98, 0.66, 0.13);
+        return G_COLOR;
     } else if (nucleotideID <= 0.5) { // 10
-        return vec3(0.22, 0.44, 0.92);
+        return C_COLOR;
     }
     return vec3(0);
 }
 
 vec3 complementaryNucleotideColor(float nucleotideID) {
     if (nucleotideID == 0.0) { // 0
-        return vec3(0.1, 0.53, 0.26);
+        return T_COLOR;
     } else if (nucleotideID == 1.0) { // 255
-        return vec3(0.8, 0.2, 0.17);
+        return A_COLOR;
     } else if (nucleotideID >= 0.5) { // 200
-        return vec3(0.22, 0.44, 0.92);
+        return C_COLOR;
     } else if (nucleotideID <= 0.5) { // 10
-        return vec3(0.98, 0.66, 0.13);
+        return G_COLOR;
     }
     return vec3(0);
 }
 
 void main() {
     vec3 viewDir = rayDirection(45.0, res, gl_FragCoord.xy);
-    vec3 eye = vec3(5.0, (mpos.y - 0.5) * 20.0, 5.0);
+    vec2 viewPerspective = mpos * 3.0;
+    vec3 eye = vec3(5.0, (viewPerspective.y - 0.5) * 20.0, 5.0);
 
-    eye = eye * rotateY((mpos.x - 0.5) * 3.14);
+    eye = eye * rotateY((viewPerspective.x - 0.5) * 3.14);
     
     mat3 viewToWorld = genViewMatrix(eye, vec3(0.0, 0.0, 0.0), vec3(0.0, 1.0, 0.0));
     
