@@ -66,6 +66,7 @@ float sceneSDF(vec3 samplePoint) {
     return opUnion(nucleotides, phosphates);
 }
 
+
 float shortestDistanceToSurface(vec3 eye, vec3 marchingDirection, float start, float end) {
     float depth = start;
     for (int i = 0; i < MAX_MARCHING_STEPS; i++) {
@@ -184,7 +185,7 @@ void main() {
     
     vec3 p = eye + dist * worldDir;
 
-    vec3 K_a = vec3(1.0);
+    vec3 K_a = vec3(0.0);
     if (sqrt(pow(p.x, 2.0) + pow(p.z, 2.0)) < PHOS_SEP / 2.0 - PHOS_RADIUS) {
         float nuc_color_idx = texture2D(sequenceTexture, vec2(mod((p.y - 0.05) / NUC_SEP, float(sequenceLength)) / float(sequenceLength), 0.5)).w; // sequence[int(mod(floor(p.y / NUC_SEP), 3.0))];
         if ((p*rotateY(COIL_RATE*p.y)).z < 0.0) {

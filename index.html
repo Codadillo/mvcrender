@@ -138,7 +138,7 @@
             gl.clearColor(0.0, 0.0, 0.0, 0.0);
             gl.clear(gl.COLOR_BUFFER_BIT);
 
-            fetch('/frag.glsl')
+            fetch('mvcrender/frag.glsl')
                 .then(function (response) {
                     return response.text();
                 })
